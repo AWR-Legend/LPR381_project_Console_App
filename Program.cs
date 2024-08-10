@@ -1,5 +1,4 @@
-﻿using LPR381_project.Branch_and_Bound;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.IO;
 
 namespace LPR381_project
 {
-    internal class Program : Branch_Bound  // //BB3
+    internal class Program // //BB3
     {
        
         enum Menu
@@ -21,8 +20,41 @@ namespace LPR381_project
 
             bool klaar = false;
             do
+
             {
-                
+                ReadWriteTextFile reader = new ReadWriteTextFile();
+                var objectiveFunction = reader.ObjectiveFunction;
+                var constraints = reader.Constraints;
+                var signRestrictions = reader.SignRestrictions;
+                Console.WriteLine("Press any key to enter a text file:");
+                Console.ReadLine();
+                reader.Reader();
+                // Print Objective Function
+                Console.WriteLine("Objective Function:");
+                foreach (var value in reader.ObjectiveFunction)
+                {
+                    Console.Write($"{value} ");
+                }
+                Console.WriteLine();
+
+                // Print Constraints
+                Console.WriteLine("\nConstraints:");
+                foreach (var constraint in reader.Constraints)
+                {
+                    foreach (var value in constraint)
+                    {
+                        Console.Write($"{value} ");
+                    }
+                    Console.WriteLine();
+                }
+
+                // Print Sign Restrictions
+                Console.WriteLine("\nSign Restrictions:");
+                foreach (var restriction in reader.SignRestrictions)
+                {
+                    Console.Write($"{restriction} ");
+                }
+                Console.WriteLine();
                 Console.WriteLine("1: Primal Simplex");
                 Console.WriteLine("2: Branch and Bound");
                 Console.WriteLine("3: Knapsack");
@@ -58,7 +90,7 @@ namespace LPR381_project
                              Console.WriteLine(maxProfit);
                              Console.ReadLine();*/
                             /////////////////////////////////////////////
-                           
+                      /*     
                             Branch_Bound branchBound = new Branch_Bound();
                             File.WriteAllText(branchBound.filePath, string.Empty);
                             // Constraints
@@ -83,7 +115,7 @@ namespace LPR381_project
                             Console.WriteLine("Final answer");
                             Console.WriteLine("Maximum Z: " + branchBound.MaxZ);
                             Console.WriteLine("Best Solution: x1 = " + branchBound.BestSolution[0] + ", x2 = " + branchBound.BestSolution[1]);
-                            break;
+                           */ break;
                         }
                     case Menu.Knapsack:
                         {

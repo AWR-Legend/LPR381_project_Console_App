@@ -7,7 +7,7 @@ using System.IO;
 
 namespace LPR381_project.Branch_and_Bound
 {
-    internal class Branch_Bound
+    public class Branch_Bound
     {
         public double MaxZ = double.MinValue;
         public int[] BestSolution = new int[2];
