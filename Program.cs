@@ -25,7 +25,7 @@ namespace LPR381_project
                 
                 Console.WriteLine("1: Primal Simplex");
                 Console.WriteLine("2: Branch and Bound");
-                Console.WriteLine("3: Knapsack");
+                Console.WriteLine("3: Knapsack"); //hi my names dylan
                 Console.WriteLine("4: Cutting Plane");
                 Console.WriteLine("5: Close Program");
                 int option = Convert.ToInt32(Console.ReadLine());
