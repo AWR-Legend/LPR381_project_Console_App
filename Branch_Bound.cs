@@ -25,31 +25,52 @@ namespace LPR381_project.Branch_and_Bound
             double val3 = 0;
 
             Console.WriteLine("Please enter 3 values that you would like to use for the sensitivity analysis.");
-            while (IsValue1 == false || IsValue2 == false || IsValue3 == false)
+            while (!IsValue1)
             {
                 Console.WriteLine("Value 1: ");
-                val1 = Convert.ToDouble(Console.ReadLine());
-                if (val1 >= 0 || val1<= 0)
+                string input = Console.ReadLine();
+
+                if (double.TryParse(input, out val1))
                 {
+                    // Input is a valid number
                     IsValue1 = true;
-                }                
-            }
-            while ( IsValue2 == false )
-            {
-                Console.WriteLine("Value 2: ");
-                val2 = Convert.ToDouble(Console.ReadLine());
-                if (val2 >= 0 || val2 <= 0)
+                }
+                else
                 {
-                    IsValue2 = true;
+                    // Input is either empty or not a valid number
+                    Console.WriteLine("Invalid input. Please enter a numeric value.");
                 }
             }
-            while (IsValue3 == false)
+            while (!IsValue2)
             {
                 Console.WriteLine("Value 2: ");
-                val3 = Convert.ToDouble(Console.ReadLine());
-                if (val3 >= 0 || val3 <= 0)
+                string input = Console.ReadLine();
+
+                if (double.TryParse(input, out val2))
                 {
+                    // Input is a valid number
+                    IsValue2 = true;
+                }
+                else
+                {
+                    // Input is either empty or not a valid number
+                    Console.WriteLine("Invalid input. Please enter a numeric value for value 2.");
+                }
+            }
+            while (!IsValue3)
+            {
+                Console.WriteLine("Value 3: ");
+                string input = Console.ReadLine();
+
+                if (double.TryParse(input, out val3))
+                {
+                    // Input is a valid number
                     IsValue3 = true;
+                }
+                else
+                {
+                    // Input is either empty or not a valid number
+                    Console.WriteLine("Invalid input. Please enter a numeric value for value 3.");
                 }
             }
             // For example: Decrease by 10, No change, Increase by 10
@@ -108,11 +129,15 @@ namespace LPR381_project.Branch_and_Bound
 
                         // Display and write new best solution
                         string bestSolutionText = $"New Best Solution Found: " + string.Join(", ", BestSolution.Select((val, idx) => $"x{idx + 1} = {val}")) + $", Max Z = {MaxZ}";
+                        Console.WriteLine();
                         Console.WriteLine(bestSolutionText);
+                        Console.WriteLine();
 
                         using (StreamWriter writer = new StreamWriter(filePath, true))
                         {
+                            writer.WriteLine();
                             writer.WriteLine(bestSolutionText);
+                            writer.WriteLine();
                         }
                     }
                 }
