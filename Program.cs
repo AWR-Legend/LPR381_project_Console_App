@@ -25,7 +25,9 @@ namespace LPR381_project
                 ReadWriteTextFile reader = new ReadWriteTextFile();
                 var objectiveFunction = reader.ObjectiveFunction;
                 var constraints = reader.Constraints;
+                var constraintSignRestrictions = reader.ConstraintSignRestrictions;
                 var signRestrictions = reader.SignRestrictions;
+                string IsMaximization= reader.IsMaximization;
                 Console.WriteLine("Press any key to enter a text file:");
                 Console.ReadLine();
                 reader.Reader();
@@ -47,13 +49,21 @@ namespace LPR381_project
                     }
                     Console.WriteLine();
                 }
+                Console.WriteLine("\nConstraintSignRestrictions:");
 
+                foreach (var value in reader.ConstraintSignRestrictions)
+                {
+                    Console.Write($"{value}");
+                    Console.WriteLine();
+                }
                 // Print Sign Restrictions
                 Console.WriteLine("\nSign Restrictions:");
                 foreach (var restriction in reader.SignRestrictions)
                 {
                     Console.Write($"{restriction} ");
                 }
+                Console.WriteLine("");
+                Console.WriteLine(IsMaximization);
                 Console.WriteLine();
                 Console.WriteLine("1: Primal Simplex");
                 Console.WriteLine("2: Branch and Bound");

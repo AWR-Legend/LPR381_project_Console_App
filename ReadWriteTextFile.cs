@@ -10,6 +10,10 @@ public class ReadWriteTextFile
     public List<int> ObjectiveFunction { get; private set; }
     public List<List<int>> Constraints { get; private set; }
     public List<string> SignRestrictions { get; private set; }
+    public List<string> ConstraintSignRestrictions { get; private set; }
+
+    public string IsMaximization { get; set; }
+
     public string ReadTextFile()
 	{
         string selectedFilePath = "";
@@ -41,44 +45,70 @@ public class ReadWriteTextFile
         string filePath = ReadTextFile();
         ObjectiveFunction = new List<int>();
         Constraints = new List<List<int>>();
+        ConstraintSignRestrictions = new List<string>();
         SignRestrictions = new List<string>();
-
         ParseFile(filePath);
     }
 
     private void ParseFile(string filePath)
     {
-        var lines = File.ReadAllLines(filePath);
 
-        // Parse the Objective Function
-        var objFuncParts = lines[0].Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+        var lines = File.ReadAllLines(filePath);
+        string IsMaximization = lines[0].Substring(0, 3);
+
+        // Determine if the objective function is maximization or minimization
+
+        // Parse Objective Function
+        var objFuncParts = lines[0].Split(' ').Skip(1).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
         foreach (var part in objFuncParts)
         {
-            if (int.TryParse(part, out int value))
+            if (int.TryParse(part.Trim('+'), out int value))
             {
                 ObjectiveFunction.Add(value);
             }
         }
 
+
         // Parse Constraints
-        for (int i = 1; i < lines.Length - 1; i++)
+        for (int i = 1; i < lines.Length-1; i++)
         {
-            var constraintParts = lines[i].Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+            var constraintParts = lines[i].Split(new[] { " ","<=",">=","=" }, StringSplitOptions.RemoveEmptyEntries).ToList();
             List<int> constraint = new List<int>();
 
-            foreach (var part in constraintParts)
+            // Extract coefficients for the constraint
+            for (int j = 0; j < constraintParts.Count; j++)
             {
-                if (int.TryParse(part, out int value))
+                //constraint.Add(constraintParts[j]);
+                if (int.TryParse(constraintParts[j],out int number))
                 {
-                    constraint.Add(value);
+                    constraint.Add(int.Parse(constraintParts[j]));
                 }
+            }
+            if (lines[i].Contains(">="))
+            {
+                ConstraintSignRestrictions.Add(">=");
+                Console.WriteLine("this line runs 1");
+            }
+            else if (lines[i].Contains("<="))
+            {
+                ConstraintSignRestrictions.Add("<=");
+                Console.WriteLine("this line runs 2 and its value is" + ConstraintSignRestrictions[0]);
+
+            }
+            else if (lines[i].Contains("="))
+            {
+                ConstraintSignRestrictions.Add("=");
+                Console.WriteLine("this line runs 3");
             }
 
             Constraints.Add(constraint);
+
+            // Add the sign restriction
         }
 
-        // Parse Sign Restrictions
-        var signRestrictionsParts = lines.Last().Split(' ').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+        // Parse Sign Restrictions (usually last line in the text file)
+        var signRestrictionsParts = lines.Last().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         SignRestrictions.AddRange(signRestrictionsParts);
+
     }
 }
