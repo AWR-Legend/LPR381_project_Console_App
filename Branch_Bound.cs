@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace LPR381_project.Branch_and_Bound
 {
@@ -16,8 +17,43 @@ namespace LPR381_project.Branch_and_Bound
 
         public void PerformSensitivityAnalysis(double[] objectiveFunction, List<(double[] Coefficients, double RHS, string Inequality)> constraints)
         {
-            double[] sensitivityIncrements = { -10, 0, 10 }; // For example: Decrease by 10, No change, Increase by 10
+            bool IsValue1 = false;
+            bool IsValue2 = false;
+            bool IsValue3 = false;
+            double val1 = 0;
+            double val2 = 0;
+            double val3 = 0;
 
+            Console.WriteLine("Please enter 3 values that you would like to use for the sensitivity analysis.");
+            while (IsValue1 == false || IsValue2 == false || IsValue3 == false)
+            {
+                Console.WriteLine("Value 1: ");
+                val1 = Convert.ToDouble(Console.ReadLine());
+                if (val1 >= 0 || val1<= 0)
+                {
+                    IsValue1 = true;
+                }                
+            }
+            while ( IsValue2 == false )
+            {
+                Console.WriteLine("Value 2: ");
+                val2 = Convert.ToDouble(Console.ReadLine());
+                if (val2 >= 0 || val2 <= 0)
+                {
+                    IsValue2 = true;
+                }
+            }
+            while (IsValue3 == false)
+            {
+                Console.WriteLine("Value 2: ");
+                val3 = Convert.ToDouble(Console.ReadLine());
+                if (val3 >= 0 || val3 <= 0)
+                {
+                    IsValue3 = true;
+                }
+            }
+            // For example: Decrease by 10, No change, Increase by 10
+            double[] sensitivityIncrements = { val1, val2, val3 };
             foreach (double increment in sensitivityIncrements)
             {
                 double[] adjustedObjectiveFunction = objectiveFunction.Select(coef => coef + increment).ToArray();
@@ -124,84 +160,5 @@ namespace LPR381_project.Branch_and_Bound
 
             return z;
         }
-
-
-
-
-
-
-
-
-        //    public void BranchAndBound(int[] solution, int variableIndex, double[] constraint1, double constraint1RHS, double[] constraint2, double constraint2RHS)
-        //    {
-        //        using (StreamWriter writer = new StreamWriter(filePath, true))
-        //        {
-        //            writer.WriteLine("Branch and Bound");
-        //            writer.WriteLine(" ");
-        //        }
-        //        if (variableIndex == solution.Length)
-        //        {
-        //            // Check if the current solution is feasible
-        //            if (IsFeasible(solution, constraint1, constraint1RHS, constraint2, constraint2RHS))
-        //            {
-        //                double currentZ = CalculateZ(solution);
-        //                Iteration++;
-
-        //                // Display current iteration, solution, and Z value
-        //                Console.WriteLine();
-        //                Console.WriteLine($"Iteration {Iteration}: x1 = {solution[0]}, x2 = {solution[1]}, Z = {currentZ}");
-
-        //                // Write to file
-        //                using (StreamWriter writer = new StreamWriter(filePath, true))
-        //                {
-        //                    writer.WriteLine(" ");
-        //                    writer.WriteLine($"Iteration {Iteration}: x1 = {solution[0]}, x2 = {solution[1]}, Z = {currentZ}");
-        //                }
-
-        //                if (currentZ > MaxZ)
-        //                {
-        //                    MaxZ = currentZ;
-        //                    Array.Copy(solution, BestSolution, solution.Length);
-
-        //                    // Display new best solution
-        //                    Console.WriteLine();
-        //                    Console.WriteLine($"New Best Solution Found: x1 = {BestSolution[0]}, x2 = {BestSolution[1]}, Max Z = {MaxZ}");
-
-        //                    string bestSolutionText = $"New Best Solution Found: x1 = {BestSolution[0]}, x2 = {BestSolution[1]}, Max Z = {MaxZ}";
-        //                    using (StreamWriter writer = new StreamWriter(filePath, true))
-        //                    {
-        //                        writer.WriteLine(" ");
-        //                        writer.WriteLine(bestSolutionText);
-        //                    }
-        //                }
-        //            }
-        //            return;
-        //        }
-
-        //        // Branching
-        //        for (int i = 0; i <= 6; i++)
-        //        {
-        //            solution[variableIndex] = i;
-        //            BranchAndBound(solution, variableIndex + 1, constraint1, constraint1RHS, constraint2, constraint2RHS);
-        //        }
-        //    }
-
-        //    static bool IsFeasible(int[] solution, double[] constraint1, double constraint1RHS, double[] constraint2, double constraint2RHS)
-        //    {
-        //        double lhs1 = 0, lhs2 = 0;
-
-        //        for (int i = 0; i < solution.Length; i++)
-        //        {
-        //            lhs1 += solution[i] * constraint1[i];
-        //            lhs2 += solution[i] * constraint2[i];
-        //        }
-
-        //        return lhs1 <= constraint1RHS && lhs2 <= constraint2RHS;
-        //    }
-
-        //    static double CalculateZ(int[] solution)
-        //    {
-        //        return 8 * solution[0] + 5 * solution[1];
-        //    }
     }
 }
