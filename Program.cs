@@ -24,10 +24,20 @@ namespace LPR381_project
             bool klaar = false;
             do
             {
+                ReadWriteTextFile reader = new ReadWriteTextFile();
+                var objectiveFunction = reader.ObjectiveFunction;
+                var constraints = reader.Constraints;
+                var constraintSignRestrictions = reader.ConstraintSignRestrictions;
+                var signRestrictions = reader.SignRestrictions;
+                bool IsMax = reader.IsMax;
+                Console.WriteLine("Press any key to enter a text file containing the problem you want to solve:");
+                Console.ReadLine();
+                reader.Reader();
 
+                Console.Clear();
                 Console.WriteLine("1: Primal Simplex");
                 Console.WriteLine("2: Branch and Bound");
-                Console.WriteLine("3: Knapsack"); //hi my names dylan
+                Console.WriteLine("3: Knapsack"); 
                 Console.WriteLine("4: Cutting Plane");
                 Console.WriteLine("5: Close Program");
                 int option = Convert.ToInt32(Console.ReadLine());
@@ -35,192 +45,137 @@ namespace LPR381_project
                 {
                     case Menu.Primal:
                         {
+                            
+                            // Print Objective Function
+                            Console.WriteLine("Objective Function:");
+                            foreach (var value in reader.ObjectiveFunction)
+                            {
+                                Console.Write($"{value} ");
+                            }
+                            Console.WriteLine();
 
+                            // Print Constraints
+                            Console.WriteLine("\nConstraints:");
+                            foreach (var constraint in reader.Constraints)
+                            {
+                                foreach (var value in constraint)
+                                {
+                                    Console.Write($"{value} ");
+                                }
+                                Console.WriteLine();
+                            }
+                            Console.WriteLine("\nConstraintSignRestrictions:");
 
+                            foreach (var value in reader.ConstraintSignRestrictions)
+                            {
+                                Console.Write($"{value}");
+                                Console.WriteLine();
+                            }
+                            // Print Sign Restrictions
+                            Console.WriteLine("\nSign Restrictions:");
+                            foreach (var restriction in reader.SignRestrictions)
+                            {
+                                Console.Write($"{restriction} ");
+
+                            }
+                            Console.WriteLine("");
+                            Console.WriteLine("\nMax or Min problem?");
+                            if (reader.IsMax == true)
+                            {
+                                Console.WriteLine("max");
+                            }
+                            else
+                            {
+                                Console.WriteLine("min");
+                            }
+
+                            Console.WriteLine();
+                            Console.WriteLine("Press enter to go to restart application.");
+                            Console.Clear();
                             break;
                         }
                     case Menu.BranchBound:
                         {
-                            bool Selected = false;
 
+                            Console.Clear();
                             Branch_Bound branchBound = new Branch_Bound();
                         File.WriteAllText(branchBound.filePath, string.Empty);
-                            while (Selected == false)
-                            {
-                                Console.Clear();
-                                Console.WriteLine("Original LP Model (Problem 1)");
-                                Console.WriteLine("max Z = 100x1 + 30x2");
-                                Console.WriteLine("x2 >= 3");
-                                Console.WriteLine("x1 + x2 <= 7");
-                                Console.WriteLine("10x1 + 4x2 <= 40");
-                                Console.WriteLine("x1, x2 >= 0");
-                                Console.WriteLine();
-                                Console.WriteLine("Original LP Model (Problem 2)");
-                                Console.WriteLine("max Z = 60x1 + 30x2 + 20x3");
-                                Console.WriteLine("8x1 + 6x2 + 1x3 <= 48");
-                                Console.WriteLine("4x1 + 2x2 + 1.5x3 <= 20");
-                                Console.WriteLine("2x1 + 1.5x2 + 0.5x3 <= 8");
-                                Console.WriteLine("x1, x2, x3 >= 0");
-                                Console.WriteLine();
-                                Console.WriteLine("Would you like to solve problem 1 or problem 2?");
-                                Console.WriteLine("Please answer by entering 1 for problem 1 or 2 for problem 2");
-                                int option2 = Convert.ToInt32(Console.ReadLine());
-                                if (option2 == 1)
-                                {
-                                    string filePath = "Problem1.txt"; // Path to your text file
-                                    double[] objectiveFunction = null;
-                                    List<(double[] Coefficients, double RHS, string Inequality)> constraints = new List<(double[], double, string)>();
-
-                                    using (StreamReader sr = new StreamReader(filePath))
+                           
+                                
+                                    // Print Objective Function
+                                    Console.WriteLine("Objective Function:");
+                                    foreach (var value in reader.ObjectiveFunction)
                                     {
-                                        string line;
-                                        while ((line = sr.ReadLine()) != null)
+                                        Console.Write($"{value} ");
+                                    }
+                                    Console.WriteLine();
+
+                                    // Print Constraints
+                                    Console.WriteLine("\nConstraints:");
+                                    foreach (var constraint in reader.Constraints)
+                                    {
+                                        foreach (var value in constraint)
                                         {
-                                            string[] parts = line.Split(new[] { ' ', ':', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-
-                                            if (parts[0] == "objective")
-                                            {
-                                                objectiveFunction = new double[parts.Length - 1];
-                                                for (int i = 1; i < parts.Length; i++)
-                                                {
-                                                    objectiveFunction[i - 1] = double.Parse(parts[i]);
-                                                }
-                                            }
-                                            else if (parts[0] == "constraint")
-                                            {
-                                                double[] coefficients = new double[parts.Length - 3];
-                                                for (int i = 1; i < parts.Length - 3; i++)
-                                                {
-                                                    coefficients[i - 1] = double.Parse(parts[i]);
-                                                }
-                                                string inequality = parts[parts.Length - 2];
-                                                double rhs = double.Parse(parts[parts.Length - 1]);
-                                                constraints.Add((coefficients, rhs, inequality));
-                                            }
+                                            Console.Write($"{value} ");
                                         }
+                                        Console.WriteLine();
                                     }
+                                    Console.WriteLine("\nConstraintSignRestrictions:");
 
-                                    // Output to check if the input was correctly read
-                                    Console.WriteLine("Objective Function: ");
-                                    Console.WriteLine(string.Join(" ", objectiveFunction));
-
-                                    Console.WriteLine("\nConstraints: ");
-                                    foreach (var constraint in constraints)
+                                    foreach (var value in reader.ConstraintSignRestrictions)
                                     {
-                                        Console.WriteLine($"{string.Join(" ", constraint.Coefficients)} {constraint.Inequality} {constraint.RHS}");
+                                        Console.Write($"{value}");
+                                        Console.WriteLine();
+                                    }
+                                    // Print Sign Restrictions
+                                    Console.WriteLine("\nSign Restrictions:");
+                                    foreach (var restriction in reader.SignRestrictions)
+                                    {
+                                        Console.Write($"{restriction} ");
+
+                                    }
+                                    Console.WriteLine("");
+                                    Console.WriteLine("\nMax or Min problem?");
+                                    if (reader.IsMax == true)
+                                    {
+                                        Console.WriteLine("max");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("min");
                                     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                    //Console.WriteLine("Original LP Model");
-                                    //Console.WriteLine("max Z = 100x1 + 30x2");
-                                    //Console.WriteLine("x2 >= 3");
-                                    //Console.WriteLine("x1 + x2 <= 7");
-                                    //Console.WriteLine("10x1 + 4x2 <= 40");
-                                    //Console.WriteLine("x1, x2 >= 0");
-                                    //Console.WriteLine();
-                                    //Console.WriteLine("Canonical Form");
-                                    //Console.WriteLine("-100x1 -30x2 = 0");
-                                    //Console.WriteLine("-x1 + e1 = -3");
-                                    //Console.WriteLine("x1 +x2 +s2 = 7");
-                                    //Console.WriteLine("10x1 + 4x2 + s3 = 40");
-                                    //Console.WriteLine();
-
-                                    //Selected = true;
-                                    //// This defines the objective function coefficients
-                                    //double[] objectiveFunction = { 100, 30 }; // For example: 100x1 + 30x2 + 10x3
-
-
-                                    //// Defines the constraints as a list of tuples (coefficients and RHS)
-                                    //List<(double[] Coefficients, double RHS, string Inequality)> constraints = new List<(double[], double, string)>
-                                    //    {
-                                    //        (new double[] { 0, 1 }, 3, ">="),  
-                                    //        (new double[] { 1, 1}, 7, "<="),  
-                                    //        (new double[] { 10, 4 }, 40, "<=") 
-
-                                    //    };
-                                    //// Initializes the best solution array
-                                    //branchBound.BestSolution = new int[objectiveFunction.Length];
-
-                                    //// Performs sensitivity analysis on the objective function
-                                    //branchBound.PerformSensitivityAnalysis(objectiveFunction, constraints);
-
-                                    //Console.WriteLine("All iterations have been written to " + branchBound.filePath);
-
-                                    //// This calls the function that does branching and bounding
-                                    //branchBound.BranchAndBound(new int[objectiveFunction.Length], 0, objectiveFunction, constraints);
-
-                                    //// The following code writes the results from the branch and bound to a text file.
-                                    //using (StreamWriter writer = new StreamWriter(branchBound.filePath, true))
-                                    //{
-                                    //    writer.WriteLine(" ");
-                                    //    writer.WriteLine("Final Maximum Z: " + branchBound.MaxZ);
-                                    //    writer.WriteLine("Best Final Solution: " + string.Join(", ", branchBound.BestSolution.Select((val, idx) => $"x{idx + 1} = {val}")));
-                                    //    writer.WriteLine(" ");
-                                    //}
-
-                                    //Console.WriteLine();
-                                    //Console.WriteLine("Final Maximum Z: " + branchBound.MaxZ);
-                                    //Console.WriteLine("Best Final Solution: " + string.Join(", ", branchBound.BestSolution.Select((val, idx) => $"x{idx + 1} = {val}")));
-                                    //Console.WriteLine("All iterations have been written to " + branchBound.filePath);
-                                    //Console.WriteLine();
-                                }
-                                else if (option2 == 2)
-                                {
-                                    Selected = true;
-                                    
-                                    Console.WriteLine("Original LP Model");
-                                    Console.WriteLine("max Z = 60x1 + 30x2 + 20x3");
-                                    Console.WriteLine("8x1 + 6x2 + 1x3 <= 48");
-                                    Console.WriteLine("4x1 + 2x2 + 1.5x3 <= 20");
-                                    Console.WriteLine("2x1 + 1.5x2 + 0.5x3 <= 8");
-                                    Console.WriteLine("x1, x2, x3 >= 0");
                                     Console.WriteLine();
                                     Console.WriteLine("Canonical Form");
-                                    Console.WriteLine("-60x1 -30x2 -20x3 = 0");
-                                    Console.WriteLine("8x1 + 6x2 + 1x3 + s1 = 48");
-                                    Console.WriteLine("4x1 + 2x2 + 1.5x3 + s2 = 20");
-                                    Console.WriteLine("2x1 + 1.5x2 + 0.5x3 + s3 = 8");
+                                    Console.WriteLine("-2x1 - 3x2 - 3x3 - 5x4 - 2x5 - 4x6 = 0");
+                                    Console.WriteLine("11x1 + 8x2 + 6x3+ 14x4 + 10x5 + 10x6 + 1s1 = 40");
                                     Console.WriteLine();
 
-                                    // This defines the objective function coefficients
-                                    double[] objectiveFunction = { 60, 30, 20 };
 
+                                    
+                                    // This defines the objective function coefficients
+                                   
+                                    double[] objectiveFunctionp1 = { 2, 3,3,5,2,4 };
 
                                     // Defines the constraints as a list of tuples (coefficients and RHS)
-                                    List<(double[] Coefficients, double RHS, string Inequality)> constraints = new List<(double[], double, string)>
+                                    List<(double[] Coefficients, double RHS, string Inequality)> constraintsp1 = new List<(double[], double, string)>
                                         {
-                                            (new double[] { 8, 6, 1 }, 48, "<="),
-                                            (new double[] { 4, 2, 1.5}, 20, "<="),
-                                            (new double[] { 2, 1.5, 0.5 }, 8, "<=")
+                                        (new double[] { 11, 8,6,14,10,10}, 40, "<="),
+                                           
 
                                         };
                                     // Initializes the best solution array
-                                    branchBound.BestSolution = new int[objectiveFunction.Length];
+                                    branchBound.BestSolution = new int[objectiveFunctionp1.Length];
 
                                     // Performs sensitivity analysis on the objective function
-                                    branchBound.PerformSensitivityAnalysis(objectiveFunction, constraints);
+                                    branchBound.PerformSensitivityAnalysis(objectiveFunctionp1, constraintsp1);
 
                                     Console.WriteLine("All iterations have been written to " + branchBound.filePath);
 
                                     // This calls the function that does branching and bounding
-                                    branchBound.BranchAndBound(new int[objectiveFunction.Length], 0, objectiveFunction, constraints);
+                                    branchBound.BranchAndBound(new int[objectiveFunctionp1.Length], 0, objectiveFunctionp1, constraintsp1);
 
-
+                                    // The following code writes the results from the branch and bound to a text file.
                                     using (StreamWriter writer = new StreamWriter(branchBound.filePath, true))
                                     {
                                         writer.WriteLine(" ");
@@ -228,47 +183,130 @@ namespace LPR381_project
                                         writer.WriteLine("Best Final Solution: " + string.Join(", ", branchBound.BestSolution.Select((val, idx) => $"x{idx + 1} = {val}")));
                                         writer.WriteLine(" ");
                                     }
+
                                     Console.WriteLine();
                                     Console.WriteLine("Final Maximum Z: " + branchBound.MaxZ);
                                     Console.WriteLine("Best Final Solution: " + string.Join(", ", branchBound.BestSolution.Select((val, idx) => $"x{idx + 1} = {val}")));
                                     Console.WriteLine("All iterations have been written to " + branchBound.filePath);
                                     Console.WriteLine();
-                                }
-                                else
-                                {
-                                    Selected = false;
-                                    Console.Clear();
-                                    Console.WriteLine("You have inputed the the wrong number. ");
-                                    Console.WriteLine("Please answer by entering 1 for problem 1 or 2 for problem 2"); 
-                                    Thread.Sleep(3500);
-                                    
-                                }
-                            }
-                           
-                           break;
+
+                            Console.WriteLine();
+                            Console.WriteLine("Press enter to go to restart application.");
+                            Console.Clear();
+                            break;
                         }
 
 
 
                     case Menu.Knapsack:
                         {
+                            // Print Objective Function
+                            Console.WriteLine("Objective Function:");
+                            foreach (var value in reader.ObjectiveFunction)
+                            {
+                                Console.Write($"{value} ");
+                            }
+                            Console.WriteLine();
+
+                            // Print Constraints
+                            Console.WriteLine("\nConstraints:");
+                            foreach (var constraint in reader.Constraints)
+                            {
+                                foreach (var value in constraint)
+                                {
+                                    Console.Write($"{value} ");
+                                }
+                                Console.WriteLine();
+                            }
+                            Console.WriteLine("\nConstraintSignRestrictions:");
+
+                            foreach (var value in reader.ConstraintSignRestrictions)
+                            {
+                                Console.Write($"{value}");
+                                Console.WriteLine();
+                            }
+                            // Print Sign Restrictions
+                            Console.WriteLine("\nSign Restrictions:");
+                            foreach (var restriction in reader.SignRestrictions)
+                            {
+                                Console.Write($"{restriction} ");
+
+                            }
+                            Console.WriteLine("");
+                            Console.WriteLine("\nMax or Min problem?");
+                            if (reader.IsMax == true)
+                            {
+                                Console.WriteLine("max");
+                            }
+                            else
+                            {
+                                Console.WriteLine("min");
+                            }
+                            Console.WriteLine();
+                            Console.WriteLine("Press enter to go to restart application.");
+                            Console.Clear();
                             break;
 
                         }
                     case Menu.CuttinPlane:
                         {
-                            
+                            // Print Objective Function
+                            Console.WriteLine("Objective Function:");
+                            foreach (var value in reader.ObjectiveFunction)
+                            {
+                                Console.Write($"{value} ");
+                            }
+                            Console.WriteLine();
+
+                            // Print Constraints
+                            Console.WriteLine("\nConstraints:");
+                            foreach (var constraint in reader.Constraints)
+                            {
+                                foreach (var value in constraint)
+                                {
+                                    Console.Write($"{value} ");
+                                }
+                                Console.WriteLine();
+                            }
+                            Console.WriteLine("\nConstraintSignRestrictions:");
+
+                            foreach (var value in reader.ConstraintSignRestrictions)
+                            {
+                                Console.Write($"{value}");
+                                Console.WriteLine();
+                            }
+                            // Print Sign Restrictions
+                            Console.WriteLine("\nSign Restrictions:");
+                            foreach (var restriction in reader.SignRestrictions)
+                            {
+                                Console.Write($"{restriction} ");
+
+                            }
+                            Console.WriteLine("");
+                            Console.WriteLine("\nMax or Min problem?");
+                            if (reader.IsMax == true)
+                            {
+                                Console.WriteLine("max");
+                            }
+                            else
+                            {
+                                Console.WriteLine("min");
+                            }
+                            Console.WriteLine();
+                            Console.WriteLine("Press enter to go to restart application.");
+                            Console.Clear();
                             break;
                         }
                     case Menu.Close:
                         {
+                            
                             Environment.Exit(0);
                             break;
                         }
                     
                 }
                 Console.ReadKey();
-            } while (klaar == true);
+            } while (klaar == false);
        
         }
     }
