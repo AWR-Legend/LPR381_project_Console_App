@@ -7,8 +7,8 @@ using System.Windows.Forms;
 
 public class ReadWriteTextFile
 {
-    public List<int> ObjectiveFunction { get; private set; }
-    public List<List<int>> Constraints { get; private set; }
+    public List<double> ObjectiveFunction { get; private set; }
+    public List<List<double>> Constraints { get; private set; }
     public List<string> SignRestrictions { get; private set; }
     public List<string> ConstraintSignRestrictions { get; private set; }
     public bool IsMax { get; set; }
@@ -42,8 +42,8 @@ public class ReadWriteTextFile
     public void Reader()
     {
         string filePath = ReadTextFile();
-        ObjectiveFunction = new List<int>();
-        Constraints = new List<List<int>>();
+        ObjectiveFunction = new List<double>();
+        Constraints = new List<List<double>>();
         ConstraintSignRestrictions = new List<string>();
         SignRestrictions = new List<string>();
         ParseFile(filePath);
@@ -67,24 +67,24 @@ public class ReadWriteTextFile
         var objFuncParts = lines[0].Split(' ').Skip(1).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
         foreach (var part in objFuncParts)
         {
-            if (int.TryParse(part.Trim('+'), out int value))
+            if (double.TryParse(part.Trim('+'), out double value))
             {
                 ObjectiveFunction.Add(value);
             }
         }
         // Parse Constraints
-        for (int i = 1; i < lines.Length-1; i++)
+        for (int i = 1; i < lines.Length - 1; i++)
         {
-            var constraintParts = lines[i].Split(new[] { " ","<=",">=","=" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            List<int> constraint = new List<int>();
+            var constraintParts = lines[i].Split(new[] { " ", "<=", ">=", "=" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            List<double> constraint = new List<double>();
 
             // Extract coefficients for the constraint
             for (int j = 0; j < constraintParts.Count; j++)
             {
                 //constraint.Add(constraintParts[j]);
-                if (int.TryParse(constraintParts[j],out int number))
+                if (int.TryParse(constraintParts[j], out int number))
                 {
-                    constraint.Add(int.Parse(constraintParts[j]));
+                    constraint.Add(double.Parse(constraintParts[j]));
                 }
             }
             if (lines[i].Contains(">="))
