@@ -23,7 +23,8 @@ namespace LPR381_project.Branch_and_Bound
             double val1 = 0;
             double val2 = 0;
             double val3 = 0;
-
+            // The following While loop are used to test the values that are entered by the user to prevent the 
+            // users from providing the wrong input.
             Console.WriteLine("Please enter 3 values that you would like to use for the sensitivity analysis.");
             while (!IsValue1)
             {
@@ -32,7 +33,7 @@ namespace LPR381_project.Branch_and_Bound
 
                 if (double.TryParse(input, out val1))
                 {
-                    // Input is a valid number
+                   
                     IsValue1 = true;
                 }
                 else
@@ -48,7 +49,7 @@ namespace LPR381_project.Branch_and_Bound
 
                 if (double.TryParse(input, out val2))
                 {
-                    // Input is a valid number
+                    
                     IsValue2 = true;
                 }
                 else
@@ -64,7 +65,7 @@ namespace LPR381_project.Branch_and_Bound
 
                 if (double.TryParse(input, out val3))
                 {
-                    // Input is a valid number
+                    
                     IsValue3 = true;
                 }
                 else
@@ -79,10 +80,10 @@ namespace LPR381_project.Branch_and_Bound
             {
                 double[] adjustedObjectiveFunction = objectiveFunction.Select(coef => coef + increment).ToArray();
 
-                MaxZ = double.MinValue; // Reset MaxZ for each sensitivity analysis
+                MaxZ = double.MinValue; // Resets MaxZ for each sensitivity analysis
                 BranchAndBound(new int[objectiveFunction.Length], 0, adjustedObjectiveFunction, constraints);
 
-
+                // This prints the output given by the calculations from the diffrent increments
                 Console.WriteLine();
                 Console.WriteLine("This is the increment: " + increment);
                 Console.WriteLine("Objective Function: " + string.Join(", ", adjustedObjectiveFunction.Select((val, idx) => $"x{idx + 1} = {val}")));
@@ -90,7 +91,7 @@ namespace LPR381_project.Branch_and_Bound
                 Console.WriteLine("Best Final Solution: " + string.Join(", ", BestSolution.Select((val, idx) => $"x{idx + 1} = {val}")));
                 Console.WriteLine();
 
-
+                // The following code writes the output to a text file
                 using (StreamWriter writer = new StreamWriter(filePath, true))
                 {
                     writer.WriteLine();
@@ -107,16 +108,16 @@ namespace LPR381_project.Branch_and_Bound
         {
             if (variableIndex == solution.Length)
             {
-                // Check if the current solution is feasible
+                // This checks if the current solution is feasible
                 if (IsFeasible(solution, constraints))
                 {
                     double currentZ = CalculateZ(solution, objectiveFunction);
                     Iteration++;
 
-                    // Display current iteration, solution, and Z value
+                    // Displays the current iteration, solution, and Z value
                     Console.WriteLine($"Iteration {Iteration}: " + string.Join(", ", solution.Select((val, idx) => $"x{idx + 1} = {val}")) + $", Z = {currentZ}");
 
-                    // Write to file
+                    // This writes to the text file
                     using (StreamWriter writer = new StreamWriter(filePath, true))
                     {
                         writer.WriteLine($"Iteration {Iteration}: " + string.Join(", ", solution.Select((val, idx) => $"x{idx + 1} = {val}")) + $", Z = {currentZ}");
@@ -127,7 +128,7 @@ namespace LPR381_project.Branch_and_Bound
                         MaxZ = currentZ;
                         Array.Copy(solution, BestSolution, solution.Length);
 
-                        // Display and write new best solution
+                        // Displays and writes new best solution to the text file
                         string bestSolutionText = $"New Best Solution Found: " + string.Join(", ", BestSolution.Select((val, idx) => $"x{idx + 1} = {val}")) + $", Max Z = {MaxZ}";
                         Console.WriteLine();
                         Console.WriteLine(bestSolutionText);
@@ -145,13 +146,13 @@ namespace LPR381_project.Branch_and_Bound
             }
 
             // Branching
-            for (int i = 0; i <= 10; i++) // You can adjust the upper bound for branching
+            for (int i = 0; i <= 10; i++) // You can use this to adjust the upper bound for branching
             {
                 solution[variableIndex] = i;
                 BranchAndBound(solution, variableIndex + 1, objectiveFunction, constraints);
             }
         }
-
+        //This checks whether it is feasible or not. 
         static bool IsFeasible(int[] solution, List<(double[] Coefficients, double RHS, string Inequality)> constraints)
         {
             foreach (var (coefficients, rhs, inequality) in constraints)
@@ -173,7 +174,7 @@ namespace LPR381_project.Branch_and_Bound
 
             return true;
         }
-
+        // This calculates the Z value
         static double CalculateZ(int[] solution, double[] objectiveFunction)
         {
             double z = 0;
