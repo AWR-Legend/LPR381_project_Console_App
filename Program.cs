@@ -27,7 +27,7 @@ namespace LPR381_project
                 var constraints = reader.Constraints;
                 var constraintSignRestrictions = reader.ConstraintSignRestrictions;
                 var signRestrictions = reader.SignRestrictions;
-                string IsMaximization= reader.IsMaximization;
+                bool IsMax= reader.IsMax;
                 Console.WriteLine("Press any key to enter a text file:");
                 Console.ReadLine();
                 reader.Reader();
@@ -61,9 +61,19 @@ namespace LPR381_project
                 foreach (var restriction in reader.SignRestrictions)
                 {
                     Console.Write($"{restriction} ");
+
                 }
                 Console.WriteLine("");
-                Console.WriteLine(IsMaximization);
+                Console.WriteLine("\nMax or Min problem?");
+                if (reader.IsMax==true)
+                {
+                    Console.WriteLine("max");
+                }
+                else
+                {
+                    Console.WriteLine("min");
+                }
+
                 Console.WriteLine();
                 Console.WriteLine("1: Primal Simplex");
                 Console.WriteLine("2: Branch and Bound");

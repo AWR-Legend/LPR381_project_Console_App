@@ -11,8 +11,7 @@ public class ReadWriteTextFile
     public List<List<int>> Constraints { get; private set; }
     public List<string> SignRestrictions { get; private set; }
     public List<string> ConstraintSignRestrictions { get; private set; }
-
-    public string IsMaximization { get; set; }
+    public bool IsMax { get; set; }
 
     public string ReadTextFile()
 	{
@@ -54,10 +53,16 @@ public class ReadWriteTextFile
     {
 
         var lines = File.ReadAllLines(filePath);
-        string IsMaximization = lines[0].Substring(0, 3);
-
         // Determine if the objective function is maximization or minimization
 
+        if (lines[0].Trim().ToLower().StartsWith("max"))
+        {
+            IsMax = true;
+        }
+        else if (lines[0].Trim().ToLower().StartsWith("min"))
+        {
+            IsMax = false;
+        }
         // Parse Objective Function
         var objFuncParts = lines[0].Split(' ').Skip(1).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
         foreach (var part in objFuncParts)
@@ -67,8 +72,6 @@ public class ReadWriteTextFile
                 ObjectiveFunction.Add(value);
             }
         }
-
-
         // Parse Constraints
         for (int i = 1; i < lines.Length-1; i++)
         {
@@ -87,18 +90,15 @@ public class ReadWriteTextFile
             if (lines[i].Contains(">="))
             {
                 ConstraintSignRestrictions.Add(">=");
-                Console.WriteLine("this line runs 1");
             }
             else if (lines[i].Contains("<="))
             {
                 ConstraintSignRestrictions.Add("<=");
-                Console.WriteLine("this line runs 2 and its value is" + ConstraintSignRestrictions[0]);
 
             }
             else if (lines[i].Contains("="))
             {
                 ConstraintSignRestrictions.Add("=");
-                Console.WriteLine("this line runs 3");
             }
 
             Constraints.Add(constraint);
