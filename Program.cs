@@ -25,17 +25,20 @@ namespace LPR381_project
 
             Console.WriteLine("Press any key to enter a text file containing the problem you want to solve:");
             Console.ReadLine();
+            Console.Clear();
             reader.Reader();
             var objectiveFunction = reader.ObjectiveFunction;
             var constraints = reader.Constraints;
             var constraintSigns = reader.ConstraintSigns;
             var signRestrictions = reader.SignRestrictions;
             bool IsMax = reader.IsMax;
+            
 
             PrintLP printLP = new PrintLP();
             bool cont = true;
             while (cont)
             {
+                Console.WriteLine();
                 Console.WriteLine("1: Primal Simplex");
                 Console.WriteLine("2: Branch and Bound");
                 Console.WriteLine("3: Knapsack");
