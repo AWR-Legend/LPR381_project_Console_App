@@ -83,7 +83,7 @@ namespace LPR381_project
                 }
                 if (cont =="y")
                 {
-                    Console.WriteLine("Canonical Objective Function: " + string.Join(", ", canonicalObjectiveFunction));
+                    Console.WriteLine("Canonical Objective Function: -" + string.Join(", -", canonicalObjectiveFunction));
                     Console.WriteLine("Canonical Constraints:");
                     foreach (var constraint in canonicalConstraints)
                     {
