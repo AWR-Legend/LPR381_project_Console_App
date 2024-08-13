@@ -9,6 +9,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 
+
 namespace LPR381_project
 {
     internal class Program : Branch_Bound  
@@ -112,6 +113,7 @@ namespace LPR381_project
 
                     case Menu.Knapsack:
                         {
+
                             printLP.Print(IsMax, objectiveFunction, constraints, constraintSigns, signRestrictions);
                             Console.ReadLine();
                             Console.Clear();
@@ -157,6 +159,12 @@ namespace LPR381_project
                             Console.WriteLine();
                             Console.WriteLine("Press enter to go to restart application.");
                             Console.Clear();
+
+
+
+
+
+
                             break;
 
                         }
@@ -168,27 +176,74 @@ namespace LPR381_project
 
                             CuttingPlane plane = new CuttingPlane();
 
-                            // Solve initial LP relaxation
-                            double[] solution = plane.SolveLP();
+                            // Example coefficients of constraints
+                            double[,] A = {
+            { 11, 8, 6, 14, 10, 10 }
+        };
 
-                            // Check if the solution is integer
-                            while (!plane.IsInteger(solution))
+                            // Right-hand side of constraints
+                            double[] b = { 40 };
+
+                            // Coefficients of the objective function
+                            double[] c = { 2, 3, 3, 5, 2, 4 };
+
+                            double[] solution = null;
+
+                            int iteration = 0;
+                            HashSet<string> visitedSolutions = new HashSet<string>();
+
+                            while (true)
                             {
+                                iteration++;
+                                Console.WriteLine($"Iteration {iteration}");
+
+                                // Solve the LP problem using the Simplex method
+                                solution = plane.SimplexMethod(A, b, c);
+
+                                // Display current solution
+                                Console.WriteLine("Current solution:");
+                                for (int i = 0; i < solution.Length; i++)
+                                {
+                                    Console.WriteLine($"x{i + 1} = {solution[i]}");
+                                }
+
+                                // Check if the solution is integer
+                                if (plane.IsInteger(solution))
+                                {
+                                    Console.WriteLine("Integer solution found.");
+                                    break;
+                                }
+
+                                // Detect cycling: check if this solution has been encountered before
+                                string solutionKey = string.Join(",", solution);
+                                if (visitedSolutions.Contains(solutionKey))
+                                {
+                                    Console.WriteLine("Cycling detected. Exiting.");
+                                    break;
+                                }
+                                visitedSolutions.Add(solutionKey);
+
                                 // Generate a cutting plane
                                 double[] cut = plane.GenerateCuttingPlane(solution);
 
-                                // Add the cutting plane to the constraints
-                                plane.AddCuttingPlane(cut);
+                                // Display generated cut
+                                Console.WriteLine("Generated cutting plane:");
+                                for (int i = 0; i < cut.Length - 1; i++)
+                                {
+                                    Console.Write($"{cut[i]} ");
+                                }
+                                Console.WriteLine($"<= {cut[cut.Length - 1]}");
 
-                                // Re-solve the LP with the new constraints
-                                solution = plane.SolveLP();
+                                // Add the cutting plane to the constraints
+                                plane.AddCuttingPlane(ref A, ref b, cut);
                             }
 
-                            Console.WriteLine("Optimal solution:");
-                            for (int i = 0; i < plane.numVars; i++)
+                            Console.WriteLine("Optimal integer solution:");
+                            for (int i = 0; i < solution.Length; i++)
                             {
                                 Console.WriteLine($"x{i + 1} = {solution[i]}");
                             }
+
 
                             Console.WriteLine();
                             Console.WriteLine("Press enter to go to restart application.");
