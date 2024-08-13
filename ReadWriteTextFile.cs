@@ -10,7 +10,7 @@ public class ReadWriteTextFile
     public List<double> ObjectiveFunction { get; private set; }
     public List<List<double>> Constraints { get; private set; }
     public List<string> SignRestrictions { get; private set; }
-    public List<string> ConstraintSignRestrictions { get; private set; }
+    public List<string> ConstraintSigns { get; private set; }
     public bool IsMax { get; set; }
 
     public string ReadTextFile()
@@ -44,7 +44,7 @@ public class ReadWriteTextFile
         string filePath = ReadTextFile();
         ObjectiveFunction = new List<double>();
         Constraints = new List<List<double>>();
-        ConstraintSignRestrictions = new List<string>();
+        ConstraintSigns = new List<string>();
         SignRestrictions = new List<string>();
         ParseFile(filePath);
     }
@@ -89,16 +89,16 @@ public class ReadWriteTextFile
             }
             if (lines[i].Contains(">="))
             {
-                ConstraintSignRestrictions.Add(">=");
+                ConstraintSigns.Add(">=");
             }
             else if (lines[i].Contains("<="))
             {
-                ConstraintSignRestrictions.Add("<=");
+                ConstraintSigns.Add("<=");
 
             }
             else if (lines[i].Contains("="))
             {
-                ConstraintSignRestrictions.Add("=");
+                ConstraintSigns.Add("=");
             }
 
             Constraints.Add(constraint);
