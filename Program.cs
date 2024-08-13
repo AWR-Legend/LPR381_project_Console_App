@@ -60,6 +60,7 @@ namespace LPR381_project
                             Console.ReadLine();
                             Console.Clear();
 
+                            Console.Clear();
                             Branch_Bound branchBound = new Branch_Bound();
                             File.WriteAllText(branchBound.filePath, string.Empty);
 
@@ -69,11 +70,10 @@ namespace LPR381_project
 
                             // Defines the constraints as a list of tuples (coefficients and RHS)
                             List<(double[] Coefficients, double RHS, string Inequality)> constraintsp1 = new List<(double[], double, string)>
-                                                            {
-                                                            (new double[] { 11, 8,6,14,10,10}, 40, "<="),
+                            {
+                               (new double[] { 11, 8,6,14,10,10}, 40, "<="),
 
-
-                                                            };
+                            };
                             // Initializes the best solution array
                             branchBound.BestSolution = new int[objectiveFunctionp1.Length];
 
@@ -102,12 +102,9 @@ namespace LPR381_project
 
                             Console.WriteLine();
                             Console.WriteLine("Press enter to go to restart application.");
+                            Console.ReadLine();
                             Console.Clear();
-
-
                            
-
-                            
                             break;
                         }
 
@@ -115,9 +112,9 @@ namespace LPR381_project
 
                     case Menu.Knapsack:
                         {
-                            //printLP.Print(IsMax, objectiveFunction, constraints, constraintSigns, signRestrictions);
-                            //Console.ReadLine();
-                            //Console.Clear();
+                            printLP.Print(IsMax, objectiveFunction, constraints, constraintSigns, signRestrictions);
+                            Console.ReadLine();
+                            Console.Clear();
 
                             Programs programs = new Programs();
                             Console.WriteLine("User please upload Input file :)");
@@ -168,6 +165,30 @@ namespace LPR381_project
                             printLP.Print(IsMax, objectiveFunction, constraints, constraintSigns, signRestrictions);
                             Console.ReadLine();
                             Console.Clear();
+
+                            CuttingPlane plane = new CuttingPlane();
+
+                            // Solve initial LP relaxation
+                            double[] solution = plane.SolveLP();
+
+                            // Check if the solution is integer
+                            while (!plane.IsInteger(solution))
+                            {
+                                // Generate a cutting plane
+                                double[] cut = plane.GenerateCuttingPlane(solution);
+
+                                // Add the cutting plane to the constraints
+                                plane.AddCuttingPlane(cut);
+
+                                // Re-solve the LP with the new constraints
+                                solution = plane.SolveLP();
+                            }
+
+                            Console.WriteLine("Optimal solution:");
+                            for (int i = 0; i < plane.numVars; i++)
+                            {
+                                Console.WriteLine($"x{i + 1} = {solution[i]}");
+                            }
 
                             Console.WriteLine();
                             Console.WriteLine("Press enter to go to restart application.");
@@ -470,7 +491,7 @@ namespace LPR381_project
             //        Console.ReadKey();
             //    } while (klaar == false);
 
-            }
+        }
         }
     
 }
