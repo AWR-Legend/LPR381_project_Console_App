@@ -38,7 +38,7 @@ namespace LPR381_project.Branch_and_Bound
                 }
                 else
                 {
-                    // Input is either empty or not a valid number
+                    // // This code outputs when input is either empty or not a valid number
                     Console.WriteLine("Invalid input. Please enter a numeric value.");
                 }
             }
@@ -54,7 +54,7 @@ namespace LPR381_project.Branch_and_Bound
                 }
                 else
                 {
-                    // Input is either empty or not a valid number
+                    // This code outputs when input is either empty or not a valid number
                     Console.WriteLine("Invalid input. Please enter a numeric value for value 2.");
                 }
             }
@@ -70,23 +70,23 @@ namespace LPR381_project.Branch_and_Bound
                 }
                 else
                 {
-                    // Input is either empty or not a valid number
+                    // // This code outputs when input is either empty or not a valid number
                     Console.WriteLine("Invalid input. Please enter a numeric value for value 3.");
                 }
             }
             // For example: Decrease by 10, No change, Increase by 10
-            double[] sensitivityIncrements = { val1, val2, val3 };
-            foreach (double increment in sensitivityIncrements)
+            double[] Increments_for_sensitivity = { val1, val2, val3 };
+            foreach (double increment in Increments_for_sensitivity)
             {
-                double[] adjustedObjectiveFunction = objectiveFunction.Select(coef => coef + increment).ToArray();
+                double[] adjusted_Objective_Function = objectiveFunction.Select(coef => coef + increment).ToArray();
 
                 MaxZ = double.MinValue; // Resets MaxZ for each sensitivity analysis
-                BranchAndBound(new int[objectiveFunction.Length], 0, adjustedObjectiveFunction, constraints);
+                BranchAndBound(new int[objectiveFunction.Length], 0, adjusted_Objective_Function, constraints);
 
                 // This prints the output given by the calculations from the diffrent increments
                 Console.WriteLine();
                 Console.WriteLine("This is the increment: " + increment);
-                Console.WriteLine("Objective Function: " + string.Join(", ", adjustedObjectiveFunction.Select((val, idx) => $"x{idx + 1} = {val}")));
+                Console.WriteLine("Objective Function: " + string.Join(", ", adjusted_Objective_Function.Select((val, idx) => $"x{idx + 1} = {val}")));
                 Console.WriteLine("Final Maximum Z: " + MaxZ);
                 Console.WriteLine("Best Final Solution: " + string.Join(", ", BestSolution.Select((val, idx) => $"x{idx + 1} = {val}")));
                 Console.WriteLine();
@@ -96,7 +96,7 @@ namespace LPR381_project.Branch_and_Bound
                 {
                     writer.WriteLine();
                     writer.WriteLine("This is the increment: "+ increment);
-                    writer.WriteLine("Objective Function: " + string.Join(", ", adjustedObjectiveFunction.Select((val, idx) => $"x{idx + 1} = {val}")));
+                    writer.WriteLine("Objective Function: " + string.Join(", ", adjusted_Objective_Function.Select((val, idx) => $"x{idx + 1} = {val}")));
                     writer.WriteLine("Final Maximum Z: " + MaxZ);
                     writer.WriteLine("Best Final Solution: " + string.Join(", ", BestSolution.Select((val, idx) => $"x{idx + 1} = {val}")));
                     writer.WriteLine();
@@ -114,7 +114,7 @@ namespace LPR381_project.Branch_and_Bound
                     double currentZ = CalculateZ(solution, objectiveFunction);
                     Iteration++;
 
-                    // Displays the current iteration, solution, and Z value
+                    // This displays the current iteration, solution, and Z value
                     Console.WriteLine($"Iteration {Iteration}: " + string.Join(", ", solution.Select((val, idx) => $"x{idx + 1} = {val}")) + $", Z = {currentZ}");
 
                     // This writes to the text file
@@ -134,6 +134,8 @@ namespace LPR381_project.Branch_and_Bound
                         Console.WriteLine(bestSolutionText);
                         Console.WriteLine();
 
+
+                        // This writes to the text file
                         using (StreamWriter writer = new StreamWriter(filePath, true))
                         {
                             writer.WriteLine();
