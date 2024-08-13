@@ -39,7 +39,7 @@ namespace LPR381_project
                     }
                     Console.WriteLine();
                 }
-                Console.WriteLine("\nConstraintSignRestrictions:");
+                Console.WriteLine("\nConstraint Sign Restrictions:");
 
                 foreach (var value in constraintSigns)
                 {
