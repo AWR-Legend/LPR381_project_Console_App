@@ -39,7 +39,7 @@ namespace LPR381_project
                     }
                     Console.WriteLine();
                 }
-                Console.WriteLine("\nConstraintSignRestrictions:");
+                Console.WriteLine("\nConstraint Sign Restrictions:");
 
                 foreach (var value in constraintSigns)
                 {
@@ -54,7 +54,7 @@ namespace LPR381_project
 
                 }
                 Console.WriteLine("");
-                Console.WriteLine("would you like to see the Canonical form?");
+                Console.WriteLine("would you like to see the Canonical form?( 'y' for yes | 'n' for no )");
                 var cont=Console.ReadLine();
                 if (cont == "y")
                 {
