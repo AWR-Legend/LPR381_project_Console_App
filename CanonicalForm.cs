@@ -9,90 +9,75 @@ namespace LPR381_project
 {
     public class CanonicalForm
     {
+        public List<double> CanonicalObjectiveFunction { get; private set; }
+        public List<List<double>> CanonicalConstraints { get; private set; }
+        public List<string> CanonicalSignRestrictions { get; private set; }
+
         public void ConvertToCanonical(bool IsMax, List<double> objectiveFunction, List<List<double>> constraints, List<string> constraintSigns, List<string> signRestrictions, string cont)
         {
+            // Initialize canonical constraints and sign restrictions
+            CanonicalConstraints = new List<List<double>>(constraints);
+            CanonicalSignRestrictions = new List<string>(constraintSigns);
+            CanonicalObjectiveFunction = new List<double>(objectiveFunction);
+
             if (!IsMax)
             {
                 // Convert minimization problem to maximization by negating the objective function
                 for (int i = 0; i < objectiveFunction.Count; i++)
                 {
-                    objectiveFunction[i] = -objectiveFunction[i];
+                    CanonicalObjectiveFunction[i] = -objectiveFunction[i];
                 }
-                IsMax = true; // Mark it as maximization
+                IsMax = true;
             }
 
-            for (int i = 0; i < constraints.Count; i++)
+            int numVariables = objectiveFunction.Count;
+            int numConstraints = constraints.Count;
+
+            // Adjust constraints and objective function for sign restrictions
+            for (int j = 0; j < numConstraints; j++)
             {
-
-                int numVariables = objectiveFunction.Count;
-                int numConstraints = constraints.Count;
-
-                // Convert objective function based on problem type
-                List<double> canonicalObjectiveFunction = new List<double>(objectiveFunction);
-                if (IsMax == false)
+                if (CanonicalSignRestrictions[j] == "<=")
                 {
-                    canonicalObjectiveFunction = canonicalObjectiveFunction.Select(x => -x).ToList();
+                    // Add slack variable
+                    CanonicalConstraints[j].Add(1.0);
                 }
-
-                // Initialize canonical constraints and sign restrictions
-                List<List<double>> canonicalConstraints = new List<List<double>>();
-                List<string> canonicalSignRestrictions = new List<string>();
-
-                for (int j = 0; j < numConstraints; j++)
+                else if (CanonicalSignRestrictions[j] == ">=")
                 {
-                    List<double> constraint = new List<double>(constraints[j]);
-                    string signRestriction = constraintSigns[j];
-
-                    // Add slack or surplus variables
-                    if (signRestriction == "<=")
-                    {
-                        constraint.Insert(numVariables + j, 1.0); // Add slack variable
-                        canonicalSignRestrictions.Add("bin");
-                    }
-                    else if (signRestriction == ">=")
-                    {
-                        constraint.Insert(numVariables + i, -1.0); // Add surplus variable
-                        canonicalSignRestrictions.Add("bin");
-                    }
-                    else if (signRestriction == "=")
-                    {
-                        canonicalSignRestrictions.Add("bin"); // Equation constraint
-                    }
-
-                    // Append the right-hand side value
-                    double rhs = constraint.Last();
-                    constraint.RemoveAt(constraint.Count - 1);
-                    constraint.Add(rhs);
-                    canonicalConstraints.Add(constraint);
+                    // Add surplus variable and possibly artificial variable
+                    CanonicalConstraints[j].Add(-1.0);
                 }
-
-                // Adjust the number of variables in the objective function
-                int totalVariables = numVariables + numConstraints; // Total variables after adding slack/surplus variables
-                while (canonicalObjectiveFunction.Count < totalVariables)
+                else if (CanonicalSignRestrictions[j] == "=")
                 {
-                    canonicalObjectiveFunction.Add(0);
+                    // Equality constraint, treat as such in canonical form
                 }
+            }
 
-                // Prepare canonical constraints
-                for (int j = 0; j < canonicalConstraints.Count; j++)
+            // Adjust the number of variables in the objective function
+            int totalVariables = numVariables + CanonicalConstraints[0].Count - numVariables;
+            while (CanonicalObjectiveFunction.Count < totalVariables)
+            {
+                CanonicalObjectiveFunction.Add(0);
+            }
+
+            // Prepare canonical constraints
+            for (int j = 0; j < CanonicalConstraints.Count; j++)
+            {
+                while (CanonicalConstraints[j].Count < totalVariables)
                 {
-                    while (canonicalConstraints[j].Count < totalVariables + 1)
-                    {
-                        canonicalConstraints[j].Insert(0, 0);
-                    }
+                    CanonicalConstraints[j].Add(0);
                 }
-                if (cont =="y")
+            }
+
+            // Optionally print the canonical form
+            if (cont == "y")
+            {
+                Console.WriteLine("Canonical Objective Function: " + string.Join(", ", CanonicalObjectiveFunction));
+                Console.WriteLine("Canonical Constraints:");
+                foreach (var constraint in CanonicalConstraints)
                 {
-                    Console.WriteLine("Canonical Objective Function: " + string.Join(", ", canonicalObjectiveFunction));
-                    Console.WriteLine("Canonical Constraints:");
-                    foreach (var constraint in canonicalConstraints)
-                    {
-                        Console.WriteLine(string.Join(", ", constraint));
-                    }
-                    Console.WriteLine("Canonical Sign Restrictions: " + string.Join(", ", canonicalSignRestrictions));
+                    Console.WriteLine(string.Join(", ", constraint));
                 }
-
-
+                Console.WriteLine("Canonical Sign Restrictions: " + string.Join(", ", CanonicalSignRestrictions));
             }
         }
     }

@@ -30,7 +30,7 @@ namespace LPR381_project
             var constraintSigns = reader.ConstraintSigns;
             var signRestrictions = reader.SignRestrictions;
             bool IsMax = reader.IsMax;
-
+            int varNum = reader.varNum;
             PrintLP printLP = new PrintLP();
             bool cont = true;
             while (cont)
@@ -47,9 +47,19 @@ namespace LPR381_project
                     {
                         printLP.Print(IsMax,objectiveFunction, constraints,constraintSigns,signRestrictions);
                         Console.ReadLine();
-
+                            PrimalSimplex primal = new PrimalSimplex();
+                            var canonicalForm = new CanonicalForm();
+                            Console.WriteLine("would you like to see the Canonical form?");
+                            string printCan = Console.ReadLine();
+                            canonicalForm.ConvertToCanonical(IsMax, objectiveFunction, constraints, constraintSigns, signRestrictions,printCan);
+                            // Access the canonical form values
+                            var objectiveFunctionCanonical = canonicalForm.CanonicalObjectiveFunction;
+                            var constraintsCanonical = canonicalForm.CanonicalConstraints;
+                            var signRestrictionsCanonical = canonicalForm.CanonicalSignRestrictions;
+                            primal.primalAlgorithm(IsMax, objectiveFunctionCanonical, constraintsCanonical, constraintSigns, signRestrictionsCanonical, varNum);
                         Console.WriteLine();
                         Console.WriteLine("Press enter to go to restart application.");
+                        Console.ReadLine();
                         Console.Clear();
                         break;
                     }
@@ -59,7 +69,6 @@ namespace LPR381_project
                         Console.Clear();
                         printLP.Print(IsMax, objectiveFunction, constraints, constraintSigns, signRestrictions);
                         Console.ReadLine();
-                        Console.Clear();
 
                         Branch_Bound branchBound = new Branch_Bound();
                         File.WriteAllText(branchBound.filePath, string.Empty);

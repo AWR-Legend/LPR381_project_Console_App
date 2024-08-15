@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Branch_Bound.cs" />
     <Compile Include="CanonicalForm.cs" />
+    <Compile Include="PrimalSimplex.cs" />
     <Compile Include="PrintLP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
