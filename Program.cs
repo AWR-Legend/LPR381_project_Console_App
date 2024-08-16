@@ -32,8 +32,6 @@ namespace LPR381_project
             var constraintSigns = reader.ConstraintSigns;
             var signRestrictions = reader.SignRestrictions;
             bool IsMax = reader.IsMax;
-            
-
             PrintLP printLP = new PrintLP();
             bool cont = true;
             while (cont)
