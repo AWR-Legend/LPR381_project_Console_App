@@ -12,6 +12,7 @@ public class ReadWriteTextFile
     public List<string> SignRestrictions { get; private set; }
     public List<string> ConstraintSigns { get; private set; }
     public bool IsMax { get; set; }
+    public int varNum { get; set; }
 
     public string ReadTextFile()
     {
@@ -53,6 +54,7 @@ public class ReadWriteTextFile
     {
 
         var lines = File.ReadAllLines(filePath);
+        varNum = 0;
         // Determine if the objective function is maximization or minimization
 
         if (lines[0].Trim().ToLower().StartsWith("max"))
@@ -70,6 +72,7 @@ public class ReadWriteTextFile
             if (double.TryParse(part.Trim('+'), out double value))
             {
                 ObjectiveFunction.Add(value);
+                varNum++;
             }
         }
         // Parse Constraints
