@@ -116,48 +116,17 @@ namespace LPR381_project
 
                     case Menu.Knapsack:
                         {
+                            List<double> objective_Function = reader.ObjectiveFunction;
+                            List<List<double>> con_straints = reader.Constraints;
+                            bool isMax = reader.IsMax;
 
-                            printLP.Print(IsMax, objectiveFunction, constraints, constraintSigns, signRestrictions);
+                            printLP.Print(IsMax, objective_Function, con_straints, constraintSigns, signRestrictions);
                             Console.ReadLine();
                             Console.Clear();
 
-                            Programs programs = new Programs();
-                            Console.WriteLine("User please upload Input file :)");
-                            string inputFilePath = Console.ReadLine();
-                            Console.WriteLine("User please upload output file :)");
-                            string outputFilePath = Console.ReadLine();
 
-                            if (!File.Exists(inputFilePath))
-                            {
-                                Console.WriteLine("Input file not found.");
-                                return;
-                            }
-
-                            try
-                            {
-                                var (capacity, items, objective) = programs.LoadInputFile(inputFilePath);
-
-                                using (StreamWriter writer = new StreamWriter(outputFilePath))
-                                {
-                                    KnapsackSolver solver = new KnapsackSolver(capacity, items, writer, objective);
-                                    Solution solution = solver.Execute();
-
-                                    writer.WriteLine();
-                                    writer.WriteLine("Optimal Solution:");
-                                    writer.WriteLine($"Aggregate Value: {solution.AggregateValue}");
-                                    writer.WriteLine($"Aggregate Weight: {solution.AggregateWeight}");
-                                    writer.WriteLine($"Chosen Items: {string.Join(", ", solution.ChosenItems.Select((s, i) => s == 1 ? $"Item {i + 1}" : string.Empty).Where(x => !string.IsNullOrEmpty(x)))}");
-
-                                    Console.WriteLine("Solution has been written to the output file.");
-
-                                    // Perform Sensitivity Analysis
-                                    programs.PerformAnalysis(solver, items, solution, capacity, outputFilePath);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("An error occurred: " + ex.Message);
-                            }
+                            MenuRelated knapsackMenu = new MenuRelated();
+                            knapsackMenu.RunKnapsackMenu(objectiveFunction, constraints, isMax);
 
                             Console.WriteLine();
                             Console.WriteLine("Press enter to go to restart application.");
@@ -180,9 +149,10 @@ namespace LPR381_project
                             CuttingPlane plane = new CuttingPlane();
 
                             // Example coefficients of constraints
-                            double[,] A = {
-            { 11, 8, 6, 14, 10, 10 }
-        };
+                            double[,] A = 
+                                {
+                                      { 11, 8, 6, 14, 10, 10 }
+                                };
 
                             // Right-hand side of constraints
                             double[] b = { 40 };
