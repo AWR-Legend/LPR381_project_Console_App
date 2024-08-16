@@ -64,6 +64,7 @@
     <Compile Include="CanonicalForm.cs" />
     <Compile Include="CuttingPlane.cs" />
     <Compile Include="Knapsack.cs" />
+    <Compile Include="PrimalSimplex.cs" />
     <Compile Include="PrintLP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
