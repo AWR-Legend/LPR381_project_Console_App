@@ -10,8 +10,7 @@ namespace LPR381_project
 {
     internal class CuttingPlane
     {
-        
-        public  double[] SimplexMethod(double[,] A, double[] b, double[] c)
+        public double[] SimplexMethod(double[,] A, double[] b, double[] c)
         {
             int m = A.GetLength(0); // Number of constraints
             int n = A.GetLength(1); // Number of variables
@@ -115,7 +114,7 @@ namespace LPR381_project
             return solution;
         }
 
-        public  bool IsInteger(double[] solution)
+        public bool IsInteger(double[] solution)
         {
             foreach (double x in solution)
             {
@@ -125,18 +124,18 @@ namespace LPR381_project
             return true;
         }
 
-        public  double[] GenerateCuttingPlane(double[] solution)
+        public double[] GenerateCuttingPlane(double[] solution)
         {
             double[] cut = new double[solution.Length + 1];
             for (int i = 0; i < solution.Length; i++)
             {
                 cut[i] = solution[i] - Math.Floor(solution[i]);
             }
-            cut[solution.Length] = 0.5; // Adjust the RHS of the cut to ensure it's a half-integer
+            cut[solution.Length] = -0.5; // Adjust RHS for integer solution
             return cut;
         }
 
-        public  void AddCuttingPlane(ref double[,] A, ref double[] b, double[] cut)
+        public void AddCuttingPlane(ref double[,] A, ref double[] b, double[] cut)
         {
             int m = A.GetLength(0);
             int n = A.GetLength(1);
@@ -167,5 +166,6 @@ namespace LPR381_project
 
             b = newB;
         }
+          
     }
 }
