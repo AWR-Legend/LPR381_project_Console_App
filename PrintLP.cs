@@ -67,7 +67,7 @@ namespace LPR381_project
                     canonicalForm.ConvertToCanonical(IsMax, objectiveFunction, constraints, constraintSigns, signRestrictions, cont);
 
                 }
-                Console.ReadLine();
+               
             
         }
     }
