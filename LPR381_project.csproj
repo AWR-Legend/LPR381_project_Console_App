@@ -60,7 +60,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Branch_and_Bound\BB3.cs" />
     <Compile Include="Branch_Bound.cs" />
     <Compile Include="CanonicalForm.cs" />
     <Compile Include="CuttingPlane.cs" />
